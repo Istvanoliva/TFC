@@ -14,6 +14,14 @@ const { expect } = chai;
 describe('Test endpoint GET/teams', () => {
 
   describe('In case of successful request', () => {
+
+    beforeEach(async () => {
+      sinon
+        .stub(Team, 'findByPk')
+        .resolves(teams as unknown as Team)
+    });
+
+    afterEach(() => sinon.restore());
     
     it('Should return status 200', async () => {
         const response = await chai.request(app).get('/teams').send();    
