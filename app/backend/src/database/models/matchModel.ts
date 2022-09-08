@@ -8,7 +8,7 @@ class Match extends Model {
   homeTeamGoals!: number;
   awayTeam!: number;
   awayTeamGoals!: number;
-  inProgress!: number;
+  inProgress!: boolean;
 }
 
 Match.init(
@@ -51,7 +51,8 @@ Match.init(
   },
 );
 
-Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'homeTeam' });
-Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'awayTeam' });
+Team.hasMany(Match, { foreignKey: 'id', as: 'macthes' });
+Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'teamHome' });
+Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'teamAway' });
 
 export default Match;
