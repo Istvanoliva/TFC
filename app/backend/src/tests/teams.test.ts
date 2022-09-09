@@ -17,8 +17,8 @@ describe('Test endpoint GET/teams', () => {
 
     beforeEach(async () => {
       sinon
-        .stub(Team, 'findByPk')
-        .resolves(teams as unknown as Team)
+        .stub(Team, 'findAll')
+        .resolves(teams as Team[])
     });
 
     afterEach(() => sinon.restore());
