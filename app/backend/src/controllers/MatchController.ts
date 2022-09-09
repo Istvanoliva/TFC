@@ -8,8 +8,15 @@ class MatchController {
     this.service = new MatchService();
   }
 
-  async getAllMatches(_req: Request, res: Response, next: NextFunction) {
+  async getAllMatches(req: Request, res: Response, next: NextFunction) {
     try {
+      const { inProgress } = req.query;
+
+      if (inProgress) {
+        const currentMatch = await this.service.getProgressMatchs(JSON.parse(inProgress as string));
+        return res.status(200).json(currentMatch);
+      }
+
       const matches = await this.service.getAllMatches();
       return res.status(200).json(matches);
     } catch (error) {
