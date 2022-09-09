@@ -48,3 +48,23 @@ describe('Test endpoint POST/login', () => {
     });
   })
 });
+
+describe('Test endpoint GET/login/validate', () => {
+
+  describe('In case of successful request', () => {
+
+    it('Should return 200', async () => {
+
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send(userReq);
+
+      const response = await chai.request(app)
+      .get('/login/validate')
+      .set('Authorization', token)
+      
+      expect(response.status).to.equal(200);
+    });
+  });
+});
