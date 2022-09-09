@@ -42,3 +42,6 @@ export const matchesMock = [
       },
     },
   ];
+
+  export const inProgress = matchesMock.filter((team) => team.inProgress === true);
+  export const finished = matchesMock.filter((team) => team.inProgress === false);
