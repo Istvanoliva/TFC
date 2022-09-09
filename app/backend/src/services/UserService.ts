@@ -5,8 +5,9 @@ import { ILogin } from '../typescript/interfaces/userInterface';
 import { jwtGenerator } from '../helpers/jwtGenerator';
 
 class UserService {
-  createToken = async (login: ILogin) => {
+  createToken = async (login: ILogin): Promise<string> => {
     const user = await User.findOne({ where: { email: login.email } });
+
     if (!user || !(await bcrypt.compare(login.password, user.password))) {
       throw new HttpError(401, 'Incorrect email or password');
     }
