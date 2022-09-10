@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import MatchService from '../services/MatchService';
+import { ICreateMatch } from '../typescript/interfaces/matchesInterface';
 
 class MatchController {
   private service: MatchService;
@@ -19,6 +20,16 @@ class MatchController {
 
       const matches = await this.service.getAllMatches();
       return res.status(200).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createMatch(req: Request, res: Response, next: NextFunction) {
+    try {
+      const create = req.body as ICreateMatch;
+      const newMath = await this.service.createMatch(create);
+      return res.status(201).json(newMath);
     } catch (error) {
       next(error);
     }
