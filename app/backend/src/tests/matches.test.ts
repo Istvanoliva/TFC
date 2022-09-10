@@ -5,8 +5,12 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 
 import Match from '../database/models/matchModel';
+import User from '../database/models/userModel';
+
 import IMatch from '../typescript/interfaces/matchesInterface';
-import { matchesMock, inProgress, finished } from './mock/matches';
+
+import { matchesMock, inProgress, finished, newMatch, createdMatch } from './mock/matches';
+import { userReq, userRes } from './mock/users';
 
 chai.use(chaiHttp);
 
@@ -28,12 +32,12 @@ describe('Test endpoint GET /matches', () => {
     after(() => sinon.restore());
     
     it('Should return status 200', async () => {
-        const response = await chai.request(app).get('/matches').send();
+        const response = await chai.request(app).get('/matches');
         expect(response.status).to.equal(200);
     });
 
     it('Should return an array with all matches listed', async () => {
-        const response = await chai.request(app).get('/matches').send();
+        const response = await chai.request(app).get('/matches');
         expect(response.body).to.be.deep.equal(matchesMock);
     });
 
@@ -47,4 +51,59 @@ describe('Test endpoint GET /matches', () => {
       expect(response.body).to.be.deep.equal(finished);
     });
   });
+})
+
+describe('Test endpoint POST /matches', () => {
+
+  describe('In case of successful request', async () => {
+
+    beforeEach(async () => {
+
+      sinon
+      .stub(User, 'findOne')
+      .resolves(userRes as User)
+
+      sinon
+      .stub(Match, 'create')
+      .resolves(createdMatch as Match)
+    });
+
+    afterEach(() => sinon.restore());
+
+    it('Should return status 201', async () => {
+      
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai.request(app)
+      .post('/matches')
+      .set('Authorization', token)
+      .send(newMatch);
+
+      expect(response.status).to.equal(201);
+    });
+
+    it('Should return an object with match data', async () => {
+
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai.request(app)
+      .post('/matches')
+      .set('Authorization', token)
+      .send(newMatch);
+
+      expect(response.body).to.be.deep.equal(createdMatch);
+    });
+  })
 })
