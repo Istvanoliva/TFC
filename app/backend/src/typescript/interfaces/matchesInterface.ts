@@ -8,3 +8,10 @@ export default interface IMatch extends Match {
     teamName: string
   }
 }
+
+export interface ICreateMatch {
+  homeTeam: number,
+  homeTeamGoals: number,
+  awayTeam: number,
+  awayTeamGoals: number,
+}
