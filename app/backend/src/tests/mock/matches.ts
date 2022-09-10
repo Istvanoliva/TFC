@@ -45,3 +45,19 @@ export const matchesMock = [
 
   export const inProgress = matchesMock.filter((team) => team.inProgress === true);
   export const finished = matchesMock.filter((team) => team.inProgress === false);
+
+  export const newMatch = {
+    homeTeam: 16,
+    awayTeam: 8,
+    homeTeamGoals: 2,
+    awayTeamGoals: 2
+  };
+
+  export const createdMatch = {
+    id: 1,
+    homeTeam: 16,
+    homeTeamGoals: 2,
+    awayTeam: 8,
+    awayTeamGoals: 2,
+    inProgress: true,
+  }
