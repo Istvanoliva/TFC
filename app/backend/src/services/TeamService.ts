@@ -12,6 +12,11 @@ class TeamService {
 
     return findTeam;
   };
+
+  validateTeam = async (id: number): Promise<void> => {
+    const team = await Team.findByPk(id);
+    if (!team) throw new HttpError(404, 'There is no team with such id!');
+  };
 }
 
 export default TeamService;
