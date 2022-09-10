@@ -107,3 +107,58 @@ describe('Test endpoint POST /matches', () => {
     });
   })
 })
+
+describe('Test endpoint PATCH /matches/:id/finish', () => {
+
+  describe('In case of successful request', async () => {
+
+    beforeEach(async () => {
+
+      sinon
+      .stub(User, 'findOne')
+      .resolves(userRes as User)
+
+      sinon
+      .stub(Match, 'update')
+      .resolves([1, []])
+    });
+
+    afterEach(() => sinon.restore());
+
+    it('Should return status 200', async () => {
+      
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai
+        .request(app)
+        .patch('/matches/41/finish')
+        .set('Authorization', token)
+
+      expect(response.status).to.equal(200);
+    });
+
+    it('Should return a message "Finished"', async () => {
+      
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai
+        .request(app)
+        .patch('/matches/41/finish')
+        .set('Authorization', token)
+
+      expect(response.body).to.be.deep.equal({ message: 'Finished' });
+    });
+  });
+});
