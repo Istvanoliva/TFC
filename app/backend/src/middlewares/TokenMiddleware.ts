@@ -17,7 +17,6 @@ class tokenMiddleware {
 
       next();
     } catch (error) {
-      console.log(error);
       return res.status(401).json({ message: 'Token must be a valid token' });
     }
   };
