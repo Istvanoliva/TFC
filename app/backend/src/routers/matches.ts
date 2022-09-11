@@ -18,4 +18,10 @@ matchesRouter.post(
   (req, res, next) => matches.createMatch(req, res, next),
 );
 
+matchesRouter.patch(
+  '/matches/:id/finish',
+  token.verify,
+  (req, res, next) => matches.finishMatch(req, res, next),
+);
+
 export default matchesRouter;
