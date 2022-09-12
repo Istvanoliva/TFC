@@ -9,7 +9,7 @@ import User from '../database/models/userModel';
 
 import IMatch from '../typescript/interfaces/matchesInterface';
 
-import { matchesMock, inProgress, finished, newMatch, createdMatch } from './mock/matches';
+import { matchesMock, inProgress, finished, newMatch, createdMatch, updateGoals } from './mock/matches';
 import { userReq, userRes } from './mock/users';
 
 chai.use(chaiHttp);
@@ -159,6 +159,63 @@ describe('Test endpoint PATCH /matches/:id/finish', () => {
         .set('Authorization', token)
 
       expect(response.body).to.be.deep.equal({ message: 'Finished' });
+    });
+  });
+});
+
+describe('Test endpoint PATCH /matches/:id/', () => {
+
+  describe('In case of successful request', async () => {
+
+    beforeEach(async () => {
+
+      sinon
+      .stub(User, 'findOne')
+      .resolves(userRes as User)
+
+      sinon
+      .stub(Match, 'update')
+      .resolves([1, []])
+    });
+
+    afterEach(() => sinon.restore());
+
+    it('Should return status 200', async () => {
+      
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai
+        .request(app)
+        .patch('/matches/42')
+        .set('Authorization', token)
+        .send(updateGoals)
+
+      expect(response.status).to.equal(200);
+    });
+
+    it('Should return a message "Match updated!"', async () => {
+      
+      const { body: { token } } = await chai
+      .request(app)
+      .post('/login')
+      .send({
+        email: userReq.email,
+        password: userReq.password,
+      });
+
+      const response = await chai
+        .request(app)
+        .patch('/matches/42')
+        .set('Authorization', token)
+        .send(updateGoals)
+
+      expect(response.body).to.be.deep.equal({ message: 'Match updated!' });
     });
   });
 });
