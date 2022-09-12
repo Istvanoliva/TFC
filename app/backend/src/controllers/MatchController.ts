@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import MatchService from '../services/MatchService';
-import { ICreateMatch } from '../typescript/interfaces/matchesInterface';
+import { ICreateMatch, IUpdateMatch } from '../typescript/interfaces/matchesInterface';
 
 class MatchController {
   private service: MatchService;
@@ -30,6 +30,18 @@ class MatchController {
       const create = req.body as ICreateMatch;
       const newMath = await this.service.createMatch(create);
       return res.status(201).json(newMath);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateMatch(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body as IUpdateMatch;
+
+      const update = await this.service.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
+      return res.status(200).json(update);
     } catch (error) {
       next(error);
     }
