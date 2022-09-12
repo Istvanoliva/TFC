@@ -61,3 +61,8 @@ export const matchesMock = [
     awayTeamGoals: 2,
     inProgress: true,
   }
+
+  export const updateGoals = {
+    homeTeamGoals: 7,
+    awayTeamGoals: 1,
+  }
