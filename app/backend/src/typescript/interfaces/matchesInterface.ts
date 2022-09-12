@@ -15,3 +15,8 @@ export interface ICreateMatch {
   awayTeam: number,
   awayTeamGoals: number,
 }
+
+export interface IUpdateMatch {
+  homeTeamGoals: number,
+  awayTeamGoals: number,
+}
