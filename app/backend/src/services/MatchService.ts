@@ -32,6 +32,18 @@ class MatchService {
     return createMatch;
   };
 
+  updateMatch = async (id: number, homeTeamGoals: number, awayTeamGoals: number)
+  : Promise<object> => {
+    const match = await Match.findOne({ where: { id } });
+
+    if (!match || match?.inProgress === false) {
+      throw new HttpError(401, 'Match already over or does not exist!');
+    }
+
+    await Match.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return { message: 'Match updated!' };
+  };
+
   finishMatch = async (id: number): Promise<object> => {
     const [match] = await Match.update({ inProgress: false }, { where: { id } });
     if (!match) throw new HttpError(404, 'There is no team with such id!');
