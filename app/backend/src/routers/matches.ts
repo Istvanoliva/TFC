@@ -19,6 +19,12 @@ matchesRouter.post(
 );
 
 matchesRouter.patch(
+  '/matches/:id',
+  token.verify,
+  (req, res, next) => matches.updateMatch(req, res, next),
+);
+
+matchesRouter.patch(
   '/matches/:id/finish',
   token.verify,
   (req, res, next) => matches.finishMatch(req, res, next),
