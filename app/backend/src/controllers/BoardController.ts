@@ -16,6 +16,15 @@ class BoardController {
       next(error);
     }
   }
+
+  async getAwayBoards(_req: Request, res: Response, next:NextFunction) {
+    try {
+      const boards = await this.service.getBoards('away');
+      return res.status(200).json(boards);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default BoardController;
